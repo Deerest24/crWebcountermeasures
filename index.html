@@ -40,6 +40,23 @@
          <label for="hazardType8">Wildfire</label><br>
 </form>
 <h3>Add counteractions:</h3>
-
+ <form id="countermeasures">
+        <label for="actiontotake">Action title:</label><br>
+        <input type="text" id="actiontitle" name="actiontitle"><br>
+        <label for="actionDescription">Action Descrption:</label><br>
+        <input type="text" id="actionDescription" name="actionDescription">
+        <label for="actionLinks">Relevant link(s):</label><br><!--allow multiple-->
+        <input type="url" id="actionLinks" name="actionLinks"><br>
+        <input type="checkbox" id="targetGroup" name="targetGroup" value="allTargetGroups"><br>
+         <label for="allTargetGroups">All</label><br><!--if selected mark all as selected-->
+        <input type="checkbox" id="targetGroup1" name="targetGroup1" value="adults"><br>
+         <label for="targetGroup1">Adults</label><br>
+        <input type="checkbox" id="targetGroup2" name="targetGroup2" value="children"><br>
+         <label for="targetGroup2">Children</label><br>
+        <input type="checkbox" id="targetGroup3" name="targetGroup3" value="petOwner"><br>
+         <label for="targetGroup3">Pet Owners</label><br>
+        <input type="checkbox" id="targetGroup4" name="targetGroup4" value="propertyOwner"><br>
+         <label for="targetGroup4">Property Owners</label><br>
+</form>
 </body>
 </html>

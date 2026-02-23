@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>webCountermeasuresForm</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <h1>Build your climate resilience</h1>
+    <script src="script.js"></script> 
+
+<h3>Select location:</h3>
+ <form id="location">
+        <label for="county">County:</label><br>
+        <input type="text" id="county" name="county"><br>
+        <label for="state">State:</label><br>
+        <input type="text" id="state" name="state">
+        <label for="country">Country:</label><br>
+        <input type="text" id="country" name="country"><br>
+</form>
+
+<h3>Select hazard type(s):</h3><!--potentially smart sort by location and know main hazards-->
+ <form id="hazardType">
+        <input type="checkbox" id="allHazardTypes" name="allHazardTypes" value="allHazardTypes"><br>
+         <label for="allHazardTypes">All</label><br><!--if selected mark all as selected-->
+        <input type="checkbox" id="hazardType1" name="hazardType1" value="Earthquake"><br>
+         <label for="hazardType1">Earthquake</label><br>
+        <input type="checkbox" id="hazardType2" name="hazardType2" value="Flooding"><br>
+         <label for="hazardType2">Flooding</label><br>
+        <input type="checkbox" id="hazardType3" name="hazardType3" value="Heatwaves"><br>
+         <label for="hazardType3">Heat waves</label><br>
+        <input type="checkbox" id="hazardType4" name="hazardType4" value="Landslide"><br>
+         <label for="hazardType4">Landslide</label><br>
+         <input type="checkbox" id="hazardType5" name="hazardType5" value="Tornado"><br>
+         <label for="hazardType5">Tornado</label><br>
+         <input type="checkbox" id="hazardType6" name="hazardType6" value="Tsunami"><br>
+         <label for="hazardType6">Tsunami</label><br>
+        <input type="checkbox" id="hazardType7" name="hazardType7" value="storm"><br>
+         <label for="hazardType7">Storm</label><br>
+        <input type="checkbox" id="hazardType8" name="hazardType8" value="Wildfire"><br>
+         <label for="hazardType8">Wildfire</label><br>
+</form>
+<h3>Add counteractions:</h3>
+
+</body>
+</html>

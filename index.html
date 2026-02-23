@@ -1,62 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>webCountermeasuresForm</title>
-    <link rel="stylesheet" href="style.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Resilience Countermeasures</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Build your climate resilience</h1>
-    <script src="script.js"></script> 
+  <header class="site-header">
+    <div class="header-left">
+      <h1>Climate Resilience Countermeasures</h1>
+      <p id="location-display">Enter your location to get started</p>
+    </div>
+    <button id="export-btn" class="export-btn" disabled>↓ Export CSV</button>
+  </header>
 
-<h3>Select location:</h3>
- <form id="location">
-        <label for="county">County:</label><br>
-        <input type="text" id="county" name="county"><br>
-        <label for="state">State:</label><br>
-        <input type="text" id="state" name="state">
-        <label for="country">Country:</label><br>
-        <input type="text" id="country" name="country"><br>
-</form>
+  <main class="layout">
 
-<h3>Select hazard type(s):</h3><!--potentially smart sort by location and know main hazards-->
- <form id="hazardType">
-        <input type="checkbox" id="allHazardTypes" name="allHazardTypes" value="allHazardTypes"><br>
-         <label for="allHazardTypes">All</label><br><!--if selected mark all as selected-->
-        <input type="checkbox" id="hazardType1" name="hazardType1" value="Earthquake"><br>
-         <label for="hazardType1">Earthquake</label><br>
-        <input type="checkbox" id="hazardType2" name="hazardType2" value="Flooding"><br>
-         <label for="hazardType2">Flooding</label><br>
-        <input type="checkbox" id="hazardType3" name="hazardType3" value="Heatwaves"><br>
-         <label for="hazardType3">Heat waves</label><br>
-        <input type="checkbox" id="hazardType4" name="hazardType4" value="Landslide"><br>
-         <label for="hazardType4">Landslide</label><br>
-         <input type="checkbox" id="hazardType5" name="hazardType5" value="Tornado"><br>
-         <label for="hazardType5">Tornado</label><br>
-         <input type="checkbox" id="hazardType6" name="hazardType6" value="Tsunami"><br>
-         <label for="hazardType6">Tsunami</label><br>
-        <input type="checkbox" id="hazardType7" name="hazardType7" value="storm"><br>
-         <label for="hazardType7">Storm</label><br>
-        <input type="checkbox" id="hazardType8" name="hazardType8" value="Wildfire"><br>
-         <label for="hazardType8">Wildfire</label><br>
-</form>
-<h3>Add counteractions:</h3>
- <form id="countermeasures">
-        <label for="actiontotake">Action title:</label><br>
-        <input type="text" id="actiontitle" name="actiontitle"><br>
-        <label for="actionDescription">Action Descrption:</label><br>
-        <input type="text" id="actionDescription" name="actionDescription">
-        <label for="actionLinks">Relevant link(s):</label><br><!--allow multiple-->
-        <input type="url" id="actionLinks" name="actionLinks"><br>
-        <input type="checkbox" id="targetGroup" name="targetGroup" value="allTargetGroups"><br>
-         <label for="allTargetGroups">All</label><br><!--if selected mark all as selected-->
-        <input type="checkbox" id="targetGroup1" name="targetGroup1" value="adults"><br>
-         <label for="targetGroup1">Adults</label><br>
-        <input type="checkbox" id="targetGroup2" name="targetGroup2" value="children"><br>
-         <label for="targetGroup2">Children</label><br>
-        <input type="checkbox" id="targetGroup3" name="targetGroup3" value="petOwner"><br>
-         <label for="targetGroup3">Pet Owners</label><br>
-        <input type="checkbox" id="targetGroup4" name="targetGroup4" value="propertyOwner"><br>
-         <label for="targetGroup4">Property Owners</label><br>
-</form>
+    <!-- ===== LEFT: Input Form ===== -->
+    <aside class="form-panel">
+
+      <section class="form-section">
+        <h2>Location</h2>
+        <div class="input-stack">
+          <input type="text" id="county"  placeholder="County"          autocomplete="off">
+          <input type="text" id="state"   placeholder="State / Province" autocomplete="off">
+          <input type="text" id="country" placeholder="Country"          autocomplete="off">
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Applicable Hazard Types</h2>
+        <label class="check-item select-all-row">
+          <input type="checkbox" id="allHazards">
+          <span>Select all</span>
+        </label>
+        <div id="hazard-list"></div>
+      </section>
+
+      <section class="form-section">
+        <h2>Counteraction</h2>
+
+        <div class="ca-field">
+          <label class="ca-field-label" for="ca-title">Action title</label>
+          <input type="text" class="ca-input" id="ca-title"
+                 placeholder="e.g. Prepare emergency kit" autocomplete="off">
+        </div>
+
+        <div class="ca-field">
+          <label class="ca-field-label" for="ca-desc">Description</label>
+          <textarea class="ca-textarea" id="ca-desc"
+                    placeholder="Describe the counteraction steps…"></textarea>
+        </div>
+
+        <div class="ca-field">
+          <label class="ca-field-label">Relevant links</label>
+          <div id="links-container"></div>
+          <button type="button" id="add-link-btn" class="add-link-btn">+ Add link</button>
+        </div>
+
+        <div class="ca-field">
+          <label class="ca-field-label">Target groups</label>
+          <div class="target-grid" id="target-grid"></div>
+          <div class="custom-tag-row">
+            <input type="text" id="custom-tag-input" class="ca-input"
+                   placeholder="Add custom tag…" autocomplete="off" maxlength="40">
+            <button type="button" id="add-tag-btn" class="add-tag-btn">Add</button>
+          </div>
+          <div id="custom-tags"></div>
+        </div>
+
+      </section>
+
+      <section class="form-section">
+        <h2>Phase</h2>
+        <div id="phase-list"></div>
+      </section>
+
+    </aside>
+
+    <!-- ===== RIGHT: Card Visualization ===== -->
+    <section class="viz-panel">
+      <div id="cards-container">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">🌍</div>
+          <p>Select hazard types and enter a counteraction<br>to build your resilience card</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

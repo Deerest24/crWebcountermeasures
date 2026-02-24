@@ -13,7 +13,22 @@
       <p id="location-display">Enter your location to get started</p>
     </div>
     <button id="export-btn" class="export-btn" disabled>↓ Export CSV</button>
+    <button id="save-btn"   class="save-btn"   disabled>Save</button>
   </header>
+
+  <!-- ===== Save confirmation modal ===== -->
+  <div id="save-modal" class="modal-overlay" hidden>
+    <div class="modal-dialog">
+      <p class="modal-text">Saving your entry will add your action to our database. Do you want to do that?</p>
+      <div class="modal-actions">
+        <button id="modal-confirm" class="modal-btn modal-btn-confirm">Confirm</button>
+        <button id="modal-cancel"  class="modal-btn modal-btn-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Toast notification ===== -->
+  <div id="save-toast" class="save-toast" hidden></div>
 
   <main class="layout">
 

@@ -87,6 +87,11 @@ const caDescEl        = document.getElementById('ca-desc');
 const linksContainerEl= document.getElementById('links-container');
 const addLinkBtn      = document.getElementById('add-link-btn');
 const exportBtn       = document.getElementById('export-btn');
+const saveBtn         = document.getElementById('save-btn');
+const saveModal       = document.getElementById('save-modal');
+const modalConfirm    = document.getElementById('modal-confirm');
+const modalCancel     = document.getElementById('modal-cancel');
+const saveToast       = document.getElementById('save-toast');
 const phaseListEl     = document.getElementById('phase-list');
 
 // ============================================================
@@ -139,6 +144,12 @@ function init() {
   addLinkRow('');   // start with one empty row
 
   exportBtn.addEventListener('click', exportCSV);
+
+  saveBtn.addEventListener('click', () => { saveModal.hidden = false; });
+  modalCancel.addEventListener('click',  () => { saveModal.hidden = true; });
+  modalConfirm.addEventListener('click', handleSaveConfirm);
+  // Close modal on overlay click (outside dialog)
+  saveModal.addEventListener('click', e => { if (e.target === saveModal) saveModal.hidden = true; });
 
   restoreState();
 }
@@ -447,6 +458,75 @@ function syncEmptyState() {
 
 function syncExportBtn() {
   exportBtn.disabled = selected.size === 0;
+  saveBtn.disabled   = selected.size === 0;
+}
+
+// ============================================================
+//  Save (POST to server → append CSV + git commit)
+// ============================================================
+function buildSavePayload() {
+  const hazardNames = HAZARDS
+    .filter(h => selected.has(h.id))
+    .map(h => h.name);
+
+  const targets = [
+    ...[...actionData.targets]
+      .filter(t => t !== 'all')
+      .map(t => TARGET_GROUPS.find(x => x.id === t)?.label || t),
+    ...actionData.customTargets
+  ];
+
+  const phases = PHASES
+    .filter(p => actionData.phases[p.id].checked)
+    .map(p => `${p.label}: ${actionData.phases[p.id].score}`);
+
+  return {
+    county:  countyEl.value.trim(),
+    state:   stateEl.value.trim(),
+    country: countryEl.value.trim(),
+    hazards: hazardNames,
+    title:   actionData.title,
+    desc:    actionData.desc,
+    targets,
+    phases,
+    links:   actionData.links,
+  };
+}
+
+async function handleSaveConfirm() {
+  saveModal.hidden = true;
+  modalConfirm.disabled = true;
+
+  try {
+    const res = await fetch('/api/save', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(buildSavePayload()),
+    });
+    const json = await res.json();
+    if (json.ok) {
+      showToast('Entry saved to database!', false);
+    } else {
+      showToast('Save failed: ' + (json.error || 'unknown error'), true);
+    }
+  } catch (err) {
+    showToast('Could not reach server. Is server.js running?', true);
+  } finally {
+    modalConfirm.disabled = false;
+  }
+}
+
+function showToast(msg, isError) {
+  saveToast.textContent = msg;
+  saveToast.classList.toggle('toast-error', isError);
+  saveToast.hidden = false;
+  // Force reflow so animation replays each time
+  saveToast.getAnimations().forEach(a => a.cancel());
+  saveToast.style.animation = 'none';
+  void saveToast.offsetWidth;
+  saveToast.style.animation = '';
+  clearTimeout(saveToast._timer);
+  saveToast._timer = setTimeout(() => { saveToast.hidden = true; }, 3500);
 }
 
 // ============================================================

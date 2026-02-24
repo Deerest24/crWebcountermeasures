@@ -757,3 +757,144 @@ body {
   line-height: 1.25;
   color: #5a6a7a;
 }
+
+/* ============================================================
+   SAVE BUTTON
+   ============================================================ */
+
+.save-btn {
+  flex-shrink: 0;
+  background: rgba(72,199,142,0.18);
+  color: white;
+  border: 1.5px solid rgba(72,199,142,0.55);
+  border-radius: var(--radius-sm);
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+  white-space: nowrap;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: rgba(72,199,142,0.32);
+  border-color: rgba(72,199,142,0.85);
+}
+
+.save-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   SAVE MODAL
+   ============================================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+  animation: modalFadeIn 0.18s ease;
+}
+
+.modal-overlay[hidden] { display: none; }
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-dialog {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  max-width: 360px;
+  width: calc(100% - 40px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.28);
+  animation: modalSlideIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: scale(0.88) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-text {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--clr-text);
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-btn {
+  flex: 1;
+  max-width: 140px;
+  padding: 10px 0;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  border: 1.5px solid transparent;
+}
+
+.modal-btn:active { transform: scale(0.97); }
+
+.modal-btn-confirm {
+  background: #2e7d32;
+  color: white;
+  border-color: #2e7d32;
+}
+
+.modal-btn-confirm:hover { background: #1b5e20; border-color: #1b5e20; }
+
+.modal-btn-cancel {
+  background: #f5f8fc;
+  color: var(--clr-muted);
+  border-color: var(--clr-border);
+}
+
+.modal-btn-cancel:hover { background: #e8edf4; border-color: #b0bcc8; }
+
+/* ============================================================
+   SAVE TOAST
+   ============================================================ */
+
+.save-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: #1b5e20;
+  color: white;
+  padding: 11px 22px;
+  border-radius: 40px;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  z-index: 950;
+  animation: toastIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+}
+
+.save-toast[hidden] { display: none; }
+
+.save-toast.toast-error { background: #b71c1c; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

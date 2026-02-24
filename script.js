@@ -87,6 +87,9 @@ const caDescEl        = document.getElementById('ca-desc');
 const linksContainerEl= document.getElementById('links-container');
 const addLinkBtn      = document.getElementById('add-link-btn');
 const exportBtn       = document.getElementById('export-btn');
+const exportMenu      = document.getElementById('export-menu');
+const exportPngBtn    = document.getElementById('export-png-btn');
+const exportPdfBtn    = document.getElementById('export-pdf-btn');
 const saveBtn         = document.getElementById('save-btn');
 const saveModal       = document.getElementById('save-modal');
 const modalConfirm    = document.getElementById('modal-confirm');
@@ -143,7 +146,13 @@ function init() {
   });
   addLinkRow('');   // start with one empty row
 
-  exportBtn.addEventListener('click', exportCSV);
+  exportBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    exportMenu.hidden = !exportMenu.hidden;
+  });
+  exportPngBtn.addEventListener('click', exportPNG);
+  exportPdfBtn.addEventListener('click', exportPDF);
+  document.addEventListener('click', () => { exportMenu.hidden = true; });
 
   saveBtn.addEventListener('click', () => { saveModal.hidden = false; });
   modalCancel.addEventListener('click',  () => { saveModal.hidden = true; });
@@ -530,50 +539,53 @@ function showToast(msg, isError) {
 }
 
 // ============================================================
-//  Export CSV
+//  Export Card — PNG / PDF
 // ============================================================
-function exportCSV() {
-  const hazardNames = HAZARDS
-    .filter(h => selected.has(h.id))
-    .map(h => h.name)
-    .join('; ');
+function closeExportMenu() {
+  exportMenu.hidden = true;
+}
 
-  const targets = [
-    ...[...actionData.targets]
-      .filter(t => t !== 'all')
-      .map(t => TARGET_GROUPS.find(x => x.id === t)?.label || t),
-    ...actionData.customTargets
-  ].join('; ');
+async function exportPNG() {
+  closeExportMenu();
+  const card = document.getElementById('main-card');
+  if (!card) return;
+  showToast('Generating PNG…', false);
+  try {
+    const canvas = await html2canvas(card, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
+    const a = document.createElement('a');
+    a.download = slugTitle() + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    showToast('PNG saved!', false);
+  } catch (_) {
+    showToast('PNG export failed', true);
+  }
+}
 
-  const phasesSummary = PHASES
-    .filter(p => actionData.phases[p.id].checked)
-    .map(p => `${p.label}: ${actionData.phases[p.id].score}`)
-    .join('; ');
+async function exportPDF() {
+  closeExportMenu();
+  const card = document.getElementById('main-card');
+  if (!card) return;
+  showToast('Generating PDF…', false);
+  try {
+    const canvas  = await html2canvas(card, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/png');
+    const pxToMm  = 25.4 / 96;
+    const pdfW    = card.offsetWidth  * pxToMm;
+    const pdfH    = card.offsetHeight * pxToMm;
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [pdfW, pdfH] });
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH);
+    pdf.save(slugTitle() + '.pdf');
+    showToast('PDF saved!', false);
+  } catch (_) {
+    showToast('PDF export failed', true);
+  }
+}
 
-  const headers = ['County', 'State', 'Country', 'Hazards', 'Action Title', 'Description', 'Target Groups', 'Phases', 'Links'];
-  const row     = [
-    countyEl.value, stateEl.value, countryEl.value,
-    hazardNames, actionData.title, actionData.desc, targets, phasesSummary,
-    actionData.links.join('; ')
-  ];
-
-  const csv  = [headers, row]
-    .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
-    .join('\r\n');
-
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'collectionCountermeasures.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-
-  exportBtn.textContent = '✓ Exported';
-  exportBtn.classList.add('saved');
-  setTimeout(() => {
-    exportBtn.textContent = '↓ Export CSV';
-    exportBtn.classList.remove('saved');
-  }, 2000);
+function slugTitle() {
+  const base = actionData.title || 'countermeasure-card';
+  return base.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 40) || 'card';
 }
 
 // ============================================================

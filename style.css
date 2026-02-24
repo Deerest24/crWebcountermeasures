@@ -59,9 +59,54 @@ body {
   margin-top: 3px;
 }
 
+/* --- Export Dropdown --- */
+.export-dropdown {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: white;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  overflow: hidden;
+  z-index: 100;
+  min-width: 152px;
+  animation: menuSlideIn 0.14s ease;
+}
+
+.export-menu[hidden] { display: none; }
+
+@keyframes menuSlideIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.export-menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--clr-text);
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f0f4f9;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.export-menu-item:last-child { border-bottom: none; }
+.export-menu-item:hover { background: #f0f5fb; color: var(--clr-accent); }
+
 /* --- Export Button --- */
 .export-btn {
-  flex-shrink: 0;
   background: rgba(255,255,255,0.15);
   color: white;
   border: 1.5px solid rgba(255,255,255,0.4);

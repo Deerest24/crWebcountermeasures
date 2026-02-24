@@ -12,8 +12,14 @@
       <h1>Climate Resilience Countermeasures</h1>
       <p id="location-display">Enter your location to get started</p>
     </div>
-    <button id="export-btn" class="export-btn" disabled>↓ Export CSV</button>
-    <button id="save-btn"   class="save-btn"   disabled>Save</button>
+    <div class="export-dropdown">
+      <button id="export-btn" class="export-btn" disabled>↓ Export Card</button>
+      <div class="export-menu" id="export-menu" hidden>
+        <button class="export-menu-item" id="export-png-btn">PNG image</button>
+        <button class="export-menu-item" id="export-pdf-btn">PDF document</button>
+      </div>
+    </div>
+    <button id="save-btn" class="save-btn" disabled>Save</button>
   </header>
 
   <!-- ===== Save confirmation modal ===== -->
@@ -106,6 +112,8 @@
 
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
